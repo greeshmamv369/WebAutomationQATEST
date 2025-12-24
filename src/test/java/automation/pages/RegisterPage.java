@@ -1,7 +1,6 @@
 package automation.pages;
 
 import automation.utils.SeleniumUtils;
-import automation.Base.DriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

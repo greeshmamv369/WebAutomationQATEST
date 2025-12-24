@@ -1,6 +1,5 @@
 package automation.utils;
 
-import automation.Base.DriverManager;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.*;
@@ -14,7 +13,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class SeleniumUtils {
-    WebDriver driver;
+    static WebDriver driver;
     private static final int DEFAULT_TIMEOUT = 10; // seconds
     private static final int DEFAULT_POLLING = 500; // milliseconds
     public SeleniumUtils(WebDriver driver) {
@@ -29,7 +28,7 @@ public class SeleniumUtils {
     }
 
     public static void jsClick(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        JavascriptExecutor js = ((JavascriptExecutor)driver);
         js.executeScript("arguments[0].click();", element);
     }
 
@@ -42,7 +41,7 @@ public class SeleniumUtils {
     }
 
     public static void typeJs(WebElement element, String text) {
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript("arguments[0].value='" + text + "';", element);
     }
 
@@ -80,79 +79,79 @@ public class SeleniumUtils {
     // ================= SCROLLING =================
 
     public static void scrollIntoView(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        JavascriptExecutor js = ((JavascriptExecutor)driver);
         js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     public static void scrollBy(int x, int y) {
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        JavascriptExecutor js = ((JavascriptExecutor)driver);
         js.executeScript("window.scrollBy(arguments[0], arguments[1]);", x, y);
     }
 
     // ================= ALERTS =================
 
     public static void acceptAlert() {
-        DriverManager.getDriver().switchTo().alert().accept();
+        driver.switchTo().alert().accept();
     }
 
     public static void dismissAlert() {
-        DriverManager.getDriver().switchTo().alert().dismiss();
+        driver.switchTo().alert().dismiss();
     }
 
     public static String getAlertText() {
-        return DriverManager.getDriver().switchTo().alert().getText();
+        return driver.switchTo().alert().getText();
     }
 
     public static void sendKeysToAlert(String text) {
-        DriverManager.getDriver().switchTo().alert().sendKeys(text);
+        driver.switchTo().alert().sendKeys(text);
     }
 
     // ================= FRAMES =================
 
     public static void switchToFrameByIndex(int index) {
-        DriverManager.getDriver().switchTo().frame(index);
+        driver.switchTo().frame(index);
     }
 
     public static void switchToFrameByNameOrId(String nameOrId) {
-        DriverManager.getDriver().switchTo().frame(nameOrId);
+        driver.switchTo().frame(nameOrId);
     }
 
     public static void switchToFrameByWebElement(WebElement element) {
-        DriverManager.getDriver().switchTo().frame(element);
+        driver.switchTo().frame(element);
     }
 
     public static void switchToDefaultContent() {
-        DriverManager.getDriver().switchTo().defaultContent();
+        driver.switchTo().defaultContent();
     }
 
     // ================= ACTIONS =================
 
     public static void moveToElement(WebElement element) {
-        new Actions(DriverManager.getDriver()).moveToElement(element).perform();
+        new Actions(driver).moveToElement(element).perform();
     }
 
     public static void dragAndDrop(WebElement source, WebElement target) {
-        new Actions(DriverManager.getDriver()).dragAndDrop(source, target).perform();
+        new Actions(driver).dragAndDrop(source, target).perform();
     }
 
     public static void rightClick(WebElement element) {
-        new Actions(DriverManager.getDriver()).contextClick(element).perform();
+        new Actions(driver).contextClick(element).perform();
     }
 
     public static void doubleClick(WebElement element) {
-        new Actions(DriverManager.getDriver()).doubleClick(element).perform();
+        new Actions(driver).doubleClick(element).perform();
     }
 
     public static void clickAndHold(WebElement element) {
-        new Actions(DriverManager.getDriver()).clickAndHold(element).perform();
+        new Actions(driver).clickAndHold(element).perform();
     }
 
     public static void release(WebElement element) {
-        new Actions(DriverManager.getDriver()).release(element).perform();
+        new Actions(driver).release(element).perform();
     }
 
     public static void sendKeysUsingActions(WebElement element, String text) {
-        new Actions(DriverManager.getDriver()).sendKeys(element, text).perform();
+        new Actions(driver).sendKeys(element, text).perform();
     }
 
     // ================= CHECKBOX / RADIO =================
@@ -180,19 +179,19 @@ public class SeleniumUtils {
     // ================= NAVIGATION =================
 
     public static void navigateTo(String url) {
-        DriverManager.getDriver().navigate().to(url);
+        driver.navigate().to(url);
     }
 
     public static void navigateBack() {
-        DriverManager.getDriver().navigate().back();
+        driver.navigate().back();
     }
 
     public static void navigateForward() {
-        DriverManager.getDriver().navigate().forward();
+        driver.navigate().forward();
     }
 
     public static void refreshPage() {
-        DriverManager.getDriver().navigate().refresh();
+        driver.navigate().refresh();
     }
 
     // ================= CLEAR INPUT =================
@@ -258,49 +257,49 @@ public class SeleniumUtils {
     // ================= EXPLICIT WAITS =================
 
     public static WebElement waitForVisibility(WebElement element, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     public static void waitForClickability(WebElement element, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
     public static void waitForPresence(By locator, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
     public static void waitForText(WebElement element, String text, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.textToBePresentInElement(element, text));
     }
 
     public static void waitForTitle(String title, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.titleContains(title));
     }
 
     public static void waitForUrlContains(String keyword, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.urlContains(keyword));
     }
 
     public static void waitForAlert(int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.alertIsPresent());
     }
 
     public static void waitForFrameToBeAvailableAndSwitchToIt(WebElement frame, int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeoutInSeconds));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));
     }
 
     // ================= FLUENT WAIT =================
 
     public static WebElement fluentWait(final By locator, int timeoutInSeconds, int pollingInMillis) {
-        FluentWait<WebDriver> wait = new FluentWait<>(DriverManager.getDriver())
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(timeoutInSeconds))
                 .pollingEvery(Duration.ofMillis(pollingInMillis))
                 .ignoring(NoSuchElementException.class)
@@ -314,7 +313,7 @@ public class SeleniumUtils {
     }
 
     public static WebElement fluentWait(WebElement element, int timeoutInSeconds, int pollingInMillis) {
-        FluentWait<WebDriver> wait = new FluentWait<>(DriverManager.getDriver())
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(timeoutInSeconds))
                 .pollingEvery(Duration.ofMillis(pollingInMillis))
                 .ignoring(NoSuchElementException.class)
